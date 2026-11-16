@@ -43,7 +43,14 @@ class Folha:
         t(x0 + 80, y0 + 4.7, 'Rev. A  ·  nov. 2026', fontsize=7.5)
         # notas
         ax.text(13, 44, 'NOTAS', fontsize=7.5, fontweight='bold', va='top')
-        ax.text(13, 40, '\n'.join('%d. %s' % (i + 1, s) for i, s in enumerate(notas)), fontsize=6.3, va='top', linespacing=1.35)
+        linhas, n = [], 0
+        for s in notas:                 # linha iniciada por espaço continua a nota anterior, sem número novo
+            if s.startswith(' '):
+                linhas.append('    ' + s.strip())
+            else:
+                n += 1
+                linhas.append('%d. %s' % (n, s))
+        ax.text(13, 40, '\n'.join(linhas), fontsize=6.3, va='top', linespacing=1.35)
 
     def salvar(self):
         self.fig.savefig(os.path.join(AQUI, self.arquivo), dpi=220)
